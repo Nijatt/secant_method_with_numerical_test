@@ -1,0 +1,90 @@
+#Problem 3.11
+'''
+Apply the secant method developed in Section 3.3 to solve
+f(x)= e^(x^2) lnx^(2) −x = 0. Discuss the procedure for dealing with more than one root in a given region.
+'''
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+#Secant method
+''' f(x)=0
+x_{i+1}=x_{i} - f(x_{i}) (x_{i}-x_{i-1}) / (f(x_{i})-f(x_{i-1}))
+
+x_{i+1}=x_{i} - f(x_{i}) / backward_diff(f(x_{i}))
+'''
+##=========Important functions to develop secant method
+def function(x):
+    ''' function given in the problem'''
+    return np.exp(x**2)*np.log(x**2)-x
+
+
+def backward_diff(f,x0,x1):
+    ''' Returns backward differentiation of input function.'''
+    return float(f(x1)-f(x0))/float(x1-x0)
+
+
+def secant_method(x_0,x_1,f,tolerance):
+    ''' Secant method function input: inital boundary points as x_0 and x_1
+        given fucntion and tolerance for stopping iteration'''
+    while abs(f(x_1))>tolerance: # if function approximates to zero or smaller than tolerance then  breake.
+        x_2=x_1-float(f(x_1))/backward_diff(f,x_0,x_1)
+        x_0=x_1
+        x_1=x_2
+    return x_2
+
+
+
+
+##==========================Numerical Tests======================
+print("Test #1:")
+a1,b1=1,6 # inital boundary for test
+print("Inital boundary values are x_0=",a1," x_1=",b1)
+root1=secant_method(a1,b1,function,0.000001)
+print("Generated root value is x_i=", root1)
+print("f(x_i)=",function(root1))
+
+print("Test #2:")
+a2,b2=-6,-1 # inital boundary for test
+print("Inital boundary values are x_0=",a2," x_1=",b2)
+root2=secant_method(a2,b2,function,0.000001)
+print("Generated root value is x_i=", root2)
+print("f(x_i)=",function(root2))
+
+print("Test #3:")
+a3,b3=-1,-0.5, # inital boundary for test
+print("Inital boundary values are x_0=",a3," x_1=",b3)
+root3=secant_method(a3,b3,function,0.000001)
+print("Generated root value is x_i=", root3)
+print("f(x_i)=",function(root3))
+
+print("Test #4:")
+a4,b4=5,7 # inital boundary for test
+print("Inital boundary values are x_0=",a4," x_1=",b4)
+root4=secant_method(a4,b4,function,0.000001)
+print("Generated root value is x_i=", root4)
+print("f(x_i)=",function(root4))
+##==========================Data Scattering================================
+#x_domain_2=np.linspace(-2,2,100)
+x_domain_15=np.linspace(-1.5,1.5,100)
+
+#y_domain_2=function(x_domain_2)
+y_domain_15=function(x_domain_15)
+
+fig, ax = plt.subplots()
+
+#plt.scatter(x_domain_2,y_domain_2)
+ax.scatter(x_domain_15,y_domain_15)
+
+ax.grid(True, which='both')
+
+ax.axhline(y=0, color='k')
+ax.axvline(x=0, color='k')
+plt.xlabel("x domain")
+plt.ylabel("f(x)")
+plt.show()
+
+
+
+
